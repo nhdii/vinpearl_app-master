@@ -119,10 +119,10 @@ class _HomeScreenState extends State<HomeScreen> {
            ),
 
             ListTile(
-              leading: const Icon(Icons.person_outline),
-              title: const Text('Profile', style: TextStyle(fontSize: 16),),
+              leading:  Icon(Icons.person_outline),
+              title:  Text('Profile', style: TextStyle(fontSize: 16),),
               onTap: () {
-                Navigator.push(context, MaterialPageRoute(builder: (context) => const ProfilePage(),));
+                Navigator.push(context, MaterialPageRoute(builder: (context) =>const ProfilePage(),));
               },
             ),
             ListTile(
@@ -247,7 +247,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     Expanded(
                       child: GestureDetector(
                         onTap: () {
-                          Navigator.push(context, MaterialPageRoute(builder: (context) => const GolfPage(),));
+                          Navigator.push(context, MaterialPageRoute(builder: (context) => GolfPage(),));
                         },
                         child: Column(
                           children: [

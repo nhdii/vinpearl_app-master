@@ -2,11 +2,14 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
+import 'package:vinpearl_app/page_profile/edit_page.dart';
 import 'package:vinpearl_app/page_profile/profile_data.dart';
-import 'package:vinpearl_app/user_data/data_user.dart';
+
+import 'profile_data.dart';
 
 class ProfilePage extends StatefulWidget {
-  const ProfilePage({Key? key}) : super(key: key);
+
+  const ProfilePage({Key? key,}) : super(key: key);
 
   @override
   State<ProfilePage> createState() => _ProfilePageState();
@@ -14,32 +17,7 @@ class ProfilePage extends StatefulWidget {
 
 class _ProfilePageState extends State<ProfilePage> {
 
-  Widget _textBox(
-      String text,
-      String name,
-  ){
-    return Container(
-      width: 300,
-      decoration: BoxDecoration(
-        border: Border.all(),
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(8),
-      ),
-      margin: EdgeInsets.only(left: 15, bottom: 15),
-      padding: EdgeInsets.all(8),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Text(text),
-          SizedBox(height: 3,),
-          Text(name),
-        ],
-      ),
-    );
-  }
-
-  ProfileDataSnapshot? profileDataSnapshot;
-
+  ProfileDataSnapshot? pro;
   TextEditingController txtHo = TextEditingController();
   TextEditingController txtTen = TextEditingController();
   TextEditingController txtSdt = TextEditingController();
@@ -49,46 +27,97 @@ class _ProfilePageState extends State<ProfilePage> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        backgroundColor: Colors.transparent,
-        elevation: 0,
-        title: Padding(
-          padding: const EdgeInsets.only(left: 80.0),
-          child: Text("Profile"),
-        ),
-      ),
-      body: StreamBuilder<List<ProfileDataSnapshot>>(
-        stream: ProfileDataSnapshot.getAll(),
-        builder: (context, snapshot) {
-          return SingleChildScrollView(
-            child: Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: Column(
-                children: [
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: [
-                      Container(
-                          child: Image(image: AssetImage('assets/images/logoVinP.png'), height: 150, width: 200,)
+    return StreamBuilder<List<ProfileDataSnapshot>>(
+      stream: ProfileDataSnapshot.getAll(),
+      builder: (context, snapshot) {
+        return Scaffold(
+          appBar: AppBar(
+            backgroundColor: Colors.transparent,
+            elevation: 0,
+            title: Text("P R O F I L E"),
+            actions: [
+              IconButton(
+                onPressed: () => Navigator.push(context, MaterialPageRoute(builder: (context) => EditPage(),)),
+                icon: Icon(Icons.settings, color: Colors.black54,),
+              ),
+            ],
+          ),
+          body: Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: SingleChildScrollView(
+              child: Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Column(
+                  children: [
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        Container(
+                            child: Image(image: AssetImage('assets/images/logoVinP.png'), height: 150, width: 200,)
+                        ),
+                        SizedBox(height: 10,),
+
+                      ],
+                    ),
+                    Text("Tai khoan: ${user!.email!}", style: TextStyle(fontSize: 18),),
+                    SizedBox(height: 10,),
+                    TextField(
+                      controller: txtHo,
+                      decoration: InputDecoration(
+                        label: Text("Ho:"),
                       ),
-                      SizedBox(height: 10,),
-
-                    ],
-                  ),
-                  Text("Tai khoan: ${user!.email!}", style: TextStyle(fontSize: 18),),
-                  SizedBox(height: 10,),
-
-                  _textBox('Ho', "${profileDataSnapshot?.profileData?.ten}"),
-
-                ],
+                      keyboardType: TextInputType.text,
+                    ),
+                    TextField(
+                      controller: txtTen,
+                      decoration: InputDecoration(
+                        label: Text("Ten:"),
+                      ),
+                      keyboardType: TextInputType.text,
+                    ),
+                    TextField(
+                      controller: txtNamSinh,
+                      decoration: InputDecoration(
+                        label: Text("Nam Sinh:"),
+                      ),
+                      keyboardType: TextInputType.text,
+                    ),
+                    TextField(
+                      controller: txtSdt,
+                      decoration: InputDecoration(
+                        label: Text("SDT:"),
+                      ),
+                      keyboardType: TextInputType.text,
+                    ),
+                  ],
+                ),
               ),
             ),
-          );
-        },
-      ),
+          ),
+        );
+      },
     );
+  }
+  @override
+  void initState() {
+    //TODO: implement initSate
+    super.initState();
+    if(pro != null){
+      txtHo.text = pro!.profileData?.ho??"";
+      txtTen.text = pro!.profileData?.ten??"";
+      txtNamSinh.text = pro!.profileData?.namSinh??"";
+      txtSdt.text = pro!.profileData?.sdt??"";
+    }
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    txtHo.dispose();
+    txtTen.dispose();
+    txtNamSinh.dispose();
+    txtSdt.dispose();
   }
 }
 

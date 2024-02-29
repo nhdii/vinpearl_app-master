@@ -6,11 +6,11 @@ class ProfileData{
 
   ProfileData({
     required this.email,
-    required this.anh,
-    required this.ho,
-    required this.ten,
-    required this.namSinh,
-    required this.sdt
+    this.anh,
+    this.ho,
+    this.ten,
+    this.namSinh,
+    this.sdt
   });
 
   Map<String, dynamic> toJson() {
@@ -37,8 +37,8 @@ class ProfileData{
 }
 
 class ProfileDataSnapshot{
-  ProfileData profileData;
-  DocumentReference documentReference;
+  ProfileData? profileData;
+  DocumentReference? documentReference;
 
   ProfileDataSnapshot({
     required this.profileData,
@@ -72,14 +72,11 @@ class ProfileDataSnapshot{
   static Stream<List<ProfileDataSnapshot>> getAll(){
     Stream<QuerySnapshot> streamQS = FirebaseFirestore.instance.collection("user").snapshots();
     return streamQS.map((qs) => qs.docs.map((doc) => ProfileDataSnapshot.fromSnapshot(doc)).toList());
-
   }
 
   static Stream<List<ProfileDataSnapshot>> listProfileData(){
     Stream<QuerySnapshot> streamQS = FirebaseFirestore.instance.collection("user").snapshots();
     Stream<List<DocumentSnapshot>> streamListDocSnap = streamQS.map((querryInfo) => querryInfo.docs);
-    return streamListDocSnap.map(
-            (listDS) => listDS.map(
-                    (ds) => ProfileDataSnapshot.fromSnapshot(ds)).toList());
+    return streamListDocSnap.map((listDS) => listDS.map((ds) => ProfileDataSnapshot.fromSnapshot(ds)).toList());
   }
 }

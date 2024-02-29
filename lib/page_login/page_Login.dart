@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:vinpearl_app/auth.dart';
 import 'package:vinpearl_app/page_home/home_screen.dart';
+import 'package:vinpearl_app/page_profile/profile_data.dart';
 
 class LogInRegisterPage extends StatefulWidget {
   const LogInRegisterPage({Key? key}) : super(key: key);
@@ -13,7 +14,8 @@ class LogInRegisterPage extends StatefulWidget {
 
 class _LogInRegisterPageState extends State<LogInRegisterPage> {
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
-
+  final FirebaseAuth _firebaseAuth = FirebaseAuth.instance;
+  String? userId;
   String? errorMessage = '';
   bool isLogin = true;
 
@@ -46,6 +48,15 @@ class _LogInRegisterPageState extends State<LogInRegisterPage> {
             email: _controllerEmail.text.trim(),
             password: _controllerPassword.text.trim(),
         );
+        userId = _firebaseAuth.currentUser!.uid;
+        ProfileDataSnapshot.addUser(new ProfileData(
+          email: _controllerEmail.text,
+          anh: "",
+          namSinh: "",
+          ho: "",
+          sdt: "",
+          ten: "",
+        ), userId!);
       } else{
         errorMessage = 'Xác nhận mật khẩu không đúng';
       }
